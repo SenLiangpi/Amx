@@ -1,3 +1,9 @@
+/*
+ * @Author: Pipi
+ * @github: https://github.com/SenLiangpi
+ * @Email: pisenliang@gmail.com
+ */
+
 let Toast = {}
 Toast.install = function (Vue, todos) {
   console.log(todos);
