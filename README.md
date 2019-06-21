@@ -8,19 +8,25 @@ Amx第一版组要支持vue，还在编写过程中。
 
 github : https://github.com/SenLiangpi/Amx
 # 用法
-1、npm i vue-amx
-引入
+安装npm i vue-amx
+* 因为加载顺序原因 引入 vue-amx 不能在main.js中，请在App.vue中引入
 ```javascript
-    // 在vue main.js引入vue-amx
+    // 在vue App.vue引入vue-amx
     import vueAmx from 'vue-amx'
+    import Vue from 'vue'
     // 写入数据
     let home = {
         name: 'home',//name 名 相对于 key
         //以存在的name是否强制写入数据 true 强制写入 false 不强制
+
         //由于使用的本地存储 第一次写入只有值就会存在，如果不强制就会使用之前写入的值
+
         //如果写入一个{a:1} 不改值，不强制更新的情况下 刷新页面 值不会写入 还是上次的值{a:1}
+
         //如果写入一个{a:1} 改变改值{a:2}，不强制更新的情况下 刷新页面 值为{a:2}
-        //如果写入一个{a:1} 改变改值{a:2}，强制更新的情况下 刷新页面 值会重新写入所以值为{a:1}
+
+        //如果写入一个{a:1} 改变改值{a:2}，强制更新的情况下 刷新页面 值为{a:1}，
+        //只有在页面关闭或者重新打开一个新页面的情况下才会重新写入
         type: false,
         store: { //要写入的数据json
           a:1,
@@ -40,8 +46,16 @@ github : https://github.com/SenLiangpi/Amx
 
     let store = [home,video]
 
-    Vue.use(vueAmx,store)
+    
+    import vueamx from 'vue-amx/src/lib/index'
+    Vue.use(vueamx,store);
 
+    export default {
+      name: "App",
+      methods: {
+
+      },
+    };
 ```
 调用
 ```HTML
@@ -86,4 +100,36 @@ github : https://github.com/SenLiangpi/Amx
 可以让android ，ios 写入 或者改变 Storage 值
 页面也会动态的改变，这样可以间接的让ios和android控制web
 
-还可以跨页面数据动态刷新 
+还可以跨页面数据动态刷新
+
+# API
+* Vue.use(vueamx,store) 写入数据，在初始化时写入
+```javascript
+//写入格式为数组json
+let video = {
+  name: 'video',//唯一标识，不可以重复
+  type: false,//是否更新，如果更新，页面关闭在打开或者开启新页面数据就会变为初始化的值
+  store: {//存储的数据，json
+    a:4,
+    b:5,
+    c:6
+  }
+}
+let store = [home,video]
+Vue.use(vueamx,store)
+```
+* Amx.read("name") 读取写入的值
+```javascript
+mixins: [Amx.read("name"),Amx.read("name1")], //返回一个json
+```
+* Amx.delete(['video','home']) 删除
+```javascript
+Amx.delete(['video','home']) //删除数据，数组格式
+```
+* Amx.allDelete(type) 删除全部
+```javascript
+Amx.allDelete(type) //删除全部数据
+type===true //删除所有 强制更新的内容
+type===false //删除所有 缓存内容
+//不传值删除所有
+```

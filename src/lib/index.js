@@ -6,26 +6,29 @@
 
 let Toast = {}
 Toast.install = function (Vue, todos) {
-  console.log(todos);
   let result = {}
-  for (var todo in todos) {
-    if(todos[todo].type){
-      localStorage.setItem(todos[todo].name, JSON.stringify(todos[todo].store));
+  for (let todo in todos) {
+    if(!localStorage.getItem(todos[todo].name) && !sessionStorage.getItem(todos[todo].name)){
+      if(todos[todo].type){
+        sessionStorage.setItem(todos[todo].name, JSON.stringify(todos[todo].store))
+      }else{
+        if(localStorage.getItem(todos[todo].name)){
+          result[todos[todo].name] = 'name repeat'
+          return
+        }
+        localStorage.setItem(todos[todo].name, JSON.stringify(todos[todo].store))
+      }
       result[todos[todo].name] = 'ok'
     }else{
-      if (localStorage.getItem(todos[todo].name) == null) {
-        localStorage.setItem(todos[todo].name, JSON.stringify(todos[todo].store));
-        result[todos[todo].name] = 'ok'
-      } else {
-        result[todos[todo].name] = 'name repeat'
-      }
+      result[todos[todo].name] = 'name repeat'
     }
   }
 }
 
 Toast.read = function(key) {
   let data = {}
-  if (!localStorage.getItem(key)) {
+  const type1 = localStorage.getItem(key) , type2 = sessionStorage.getItem(key)
+  if (!type1 && !type2) {
     data[key] = 'name repeat'
     return {
       data() {
@@ -33,11 +36,21 @@ Toast.read = function(key) {
       }
     }
   }
-  data[key] = JSON.parse(localStorage.getItem(key))
+  if(type1){
+    data[key] = JSON.parse(type1)
+  }
+  if(type2){
+    data[key] = JSON.parse(type2)
+  }
   let watch = {}
   watch[key] = {
     handler(val, oldVal) {
-      localStorage.setItem(key, JSON.stringify(val))
+      if(type1){
+        localStorage.setItem(key, JSON.stringify(val))
+      }else{
+        sessionStorage.setItem(key, JSON.stringify(val))
+      }
+      
     },
     deep: true
   }
@@ -56,4 +69,21 @@ Toast.read = function(key) {
   }
 }
 
+Toast.delete = function(todos){
+  for (let todo in todos) {
+    localStorage.removeItem(todos[todo])
+    sessionStorage.removeItem(todos[todo])
+  }
+}
+Toast.allDelete = function(type){
+  if(type===true){
+    sessionStorage.clear()
+    return
+  } else if(type===false) {
+    localStorage.clear()
+    return
+  }
+  sessionStorage.clear()
+  localStorage.clear()
+}
 export default Toast;
