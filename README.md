@@ -7,6 +7,10 @@ Amx第一版组要支持vue，还在编写过程中。
 * Vue - 本地存储全局变量与vue的数据绑定相结合
 
 github : https://github.com/SenLiangpi/Amx
+
+1.2.1版本可以与Android和ios配合使用，app直接改变key对应的值就可以动态的改变web端的页面
+具体使用请与app端协商
+
 # 用法
 安装npm i vue-amx
 * 因为加载顺序原因 引入 vue-amx 不能在main.js中，请在App.vue中引入

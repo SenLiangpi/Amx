@@ -3,7 +3,31 @@
  * @github: https://github.com/SenLiangpi
  * @Email: pisenliang@gmail.com
  */
-
+let orignalSetItem = localStorage.setItem;
+localStorage.setItem = function(key,newValue){
+  let setItemEvent = new Event("setItemEvent");
+  setItemEvent.key = key;
+  setItemEvent.newValue = newValue;
+  window.dispatchEvent(setItemEvent);
+  orignalSetItem.apply(this,arguments);
+};
+function dataGet(key) {
+  const type1 = localStorage.getItem(key) , type2 = sessionStorage.getItem(key)
+  if (!type1 && !type2) {
+    data[key] = 'name repeat'
+    return {
+      data() {
+        return data
+      }
+    }
+  }
+  if(type1){
+    return type1
+  }
+  if(type2){
+    return type2
+  }
+}
 let Toast = {}
 Toast.install = function (Vue, todos) {
   let result = {}
@@ -26,22 +50,9 @@ Toast.install = function (Vue, todos) {
 }
 
 Toast.read = function(key) {
-  let data = {}
   const type1 = localStorage.getItem(key) , type2 = sessionStorage.getItem(key)
-  if (!type1 && !type2) {
-    data[key] = 'name repeat'
-    return {
-      data() {
-        return data
-      }
-    }
-  }
-  if(type1){
-    data[key] = JSON.parse(type1)
-  }
-  if(type2){
-    data[key] = JSON.parse(type2)
-  }
+  let data = {}
+  data[key] = JSON.parse(dataGet(key))
   let watch = {}
   watch[key] = {
     handler(val, oldVal) {
@@ -50,7 +61,6 @@ Toast.read = function(key) {
       }else{
         sessionStorage.setItem(key, JSON.stringify(val))
       }
-      
     },
     deep: true
   }
@@ -64,6 +74,13 @@ Toast.read = function(key) {
           this[key] = JSON.parse(e.newValue)
         }
       })
+      window.addEventListener("setItemEvent", (e) => {
+        if (e.key == key) {
+          if(e.newValue != dataGet(key)){
+            this[key] = JSON.parse(e.newValue)
+          }
+        }
+      });
     },
     watch: watch
   }
