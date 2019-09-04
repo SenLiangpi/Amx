@@ -1,3 +1,11 @@
+<!--
+ * @Author: PiPi
+ * @Github: https://github.com/SenLiangpi
+ * @Email: pisenliang@gmail.com
+ * @Date: 2019-06-17 15:38:23
+ * @LastEditors: PiPi
+ * @LastEditTime: 2019-09-04 16:25:53
+ -->
 # 全局状态管理 Amx.js
 Amx.js是一个用纯JavaScript编写的全局状态管理，主要为解决页面或组件之间状态共享、管理等问题。
 Amx第一版组要支持vue，还在编写过程中。
@@ -20,39 +28,34 @@ github : https://github.com/SenLiangpi/Amx
     import vueAmx from 'vue-amx'
     import Vue from 'vue'
     // 写入数据
-    let home = {
-        name: 'home',//name 名 相对于 key
-        //以存在的name是否强制写入数据 true 强制写入 false 不强制
-
-        //由于使用的本地存储 第一次写入只有值就会存在，如果不强制就会使用之前写入的值
-
-        //如果写入一个{a:1} 不改值，不强制更新的情况下 刷新页面 值不会写入 还是上次的值{a:1}
-
-        //如果写入一个{a:1} 改变改值{a:2}，不强制更新的情况下 刷新页面 值为{a:2}
-
-        //如果写入一个{a:1} 改变改值{a:2}，强制更新的情况下 刷新页面 值为{a:1}，
-        //只有在页面关闭或者重新打开一个新页面的情况下才会重新写入
-        type: false,
-        store: { //要写入的数据json
+    let store = {
+      /*
+       * data中的数据是会永久存储的,页面关闭或打开新的的页面时数据不会覆盖还会是你页面关闭前最后一次修改的数据，
+       * 新打开的页面和老的页面可以进行实时的数据共享
+      */
+      data:{
+        a:{
           a:1,
           b:2,
           c:3
         }
-    }
-    let video = {
-      name: 'video',
-      type: false,
-      store: {
-        a:4,
-        b:5,
-        c:6
+      },
+      //tData中的数据会在关闭这个页面时清除数据，在新打开的页面中不会有上个页面的数据，页面直接也没办法数据共享
+      tData:{
+        b:{
+          a:1,
+          b:2,
+          c:3
+        }
       }
     }
-
-    let store = [home,video]
-
-    
-    import vueamx from 'vue-amx/src/lib/index'
+    /* 
+     * 如果写入一个{a:1} 不改值，data情况下 重新打开页面 值不会写入 还是上次的值{a:1}
+     * 如果写入一个{a:1} 改变改值{a:2} data情况下 重新打开页面 值为{a:2}
+     * 如果写入一个{a:1} 改变改值{a:2} tData情况下 重新打开页面 值为{a:1}
+     * 可以根据所需使用不同的写入方式
+    */
+    import vueamx from 'vue-amx'
     Vue.use(vueamx,store);
 
     export default {
@@ -66,10 +69,10 @@ github : https://github.com/SenLiangpi/Amx
 ```HTML
 <template>
   <div class="videoa">
-    <h1>{{video}}</h1>
-    <h1>{{video.a}}</h1>
-    <h1>{{home}}</h1>
-    <h1>{{home.a}}</h1>
+    <h1>{{a}}</h1>
+    <h1>{{a.a}}</h1>
+    <h1>{{b}}</h1>
+    <h1>{{b.a}}</h1>
 
     <button @click="button()">+</button>
   </div>
@@ -84,10 +87,10 @@ github : https://github.com/SenLiangpi/Amx
           return {
           };
         },
-        mixins:[Amx.read('home'),Amx.read('video')],//调用变量 页面变量 不可以与调用变量的 name 一样
+        mixins:[Amx.read('a'),Amx.read('b')],//调用变量 页面变量 不可以与调用变量的 name 一样
         methods: {
             button(){
-                this.video.a++//直接可以调用使用 当值发生改变时 会动态的进行数据绑定
+                this.video.a++//直接可以调用使用 当值发生改变时 会动态的进行数据绑定,永久存储的数据也会进行改变
                 this.home.a++
             }
         },
@@ -126,6 +129,17 @@ Vue.use(vueamx,store)
 * Amx.read("name") 读取写入的值
 ```javascript
 mixins: [Amx.read("name"),Amx.read("name1")], //返回一个json
+```
+* Amx.allData() 读出所有数据仅限 data 永久存储数据
+```javascript
+// db就相对与你存入 data 永久存储中的所有值 所以 db = {a:{a:1,b:2,c:3}},你可以直接使用这个值也可以改变这些值
+let db = Amx.allData()
+/*
+ * 我们在这里进行了数据监听，当你改变数据在数据存储点也会动态改变，vue页面中的a.a数据也会动态的变为11
+ * 你可以很简单在vue框架之外使用数据和改这些数据，数据也会随着你的改变在vue中动态的改变
+ * 请享受这个过程
+ */
+db.a.a = 11
 ```
 * Amx.delete(['video','home']) 删除
 ```javascript
