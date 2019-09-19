@@ -4,13 +4,13 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-06-17 15:37:41
  * @LastEditors: PiPi
- * @LastEditTime: 2019-09-04 15:39:43
+ * @LastEditTime: 2019-09-18 10:27:42
  */
 function recursion(obj,Callback){
   var num = {}
   function x(o,z) {
     for(let a in o){
-      let value = o[a]
+      let value = o[a],voType
       Object.defineProperty( z, a, {
         enumerable: true,
         configurable: true,
@@ -22,7 +22,12 @@ function recursion(obj,Callback){
           Callback()
         }
       })
-      if(o[a].constructor.name == 'Object'){
+      try{
+        voType = request[o].constructor.name
+      }catch (e){
+        voType = ''
+      }
+      if(voType == 'Object'){
         x(o[a],z[a])
       }
     }
@@ -145,8 +150,13 @@ Toast.allData = function () {
   }
   var back = {}
   for(let o in request){
-    let value = request[o]
-    if(request[o].constructor.name == 'Object'){
+    let value = request[o],voType
+    try{
+      voType = request[o].constructor.name
+    }catch (e){
+      voType = ''
+    }
+    if(voType == 'Object'){
       value = recursion(request[o],function(){
         if (localStorage.getItem(o)) {
           localStorage.setItem(o, JSON.stringify(back[o]))
