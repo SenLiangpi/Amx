@@ -16,7 +16,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SenLiangpi/Amx.git"
-  }, 
+  },
   "author": "pipi",
   "license": "MIT",
   "bugs": {
@@ -28,6 +28,7 @@
     "webpack-cli": "^3.3.4"
   },
   "dependencies": {
-    "lodash": "^4.17.14"
+    "lodash": "^4.17.14",
+    "set-value": "^3.0.1"
   }
 }
