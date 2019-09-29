@@ -4,7 +4,7 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-06-17 15:37:41
  * @LastEditors: PiPi
- * @LastEditTime: 2019-09-18 10:27:42
+ * @LastEditTime: 2019-09-27 14:05:01
  */
 function recursion(obj,Callback){
   var num = {}
@@ -38,12 +38,12 @@ function recursion(obj,Callback){
 
 let orignalSetItem = localStorage.setItem;
 localStorage.setItem = function (key, newValue) {
-  let setItemEvent = new Event("setItemEvent");
-  setItemEvent.key = key;
-  setItemEvent.newValue = newValue;
-  window.dispatchEvent(setItemEvent);
-  orignalSetItem.apply(this, arguments);
-};
+  let setItemEvent = new Event("setItemEvent")
+  setItemEvent.key = key
+  setItemEvent.newValue = newValue
+  window.dispatchEvent(setItemEvent)
+  orignalSetItem.apply(this, arguments)
+}
 function dataGet(key) {
   const type1 = localStorage.getItem(key), type2 = sessionStorage.getItem(key)
   if (!type1 && !type2) {
@@ -74,7 +74,6 @@ Toast.install = function (Vue, todos) {
   }
   if (todos.tData) {
     for (let todo in todos.tData) {
-      // console.log(todo)
       if (!localStorage.getItem(todo) && !sessionStorage.getItem(todo)) {
         sessionStorage.setItem(todo, JSON.stringify(todos.tData[todo]))
       }
@@ -100,6 +99,9 @@ Toast.read = function (key) {
   return {
     data() {
       return data
+    },
+    created(){
+      this[key] = JSON.parse(dataGet(key))
     },
     mounted() {
       window.addEventListener('storage', (e) => {
@@ -182,7 +184,6 @@ Toast.allData = function () {
       }
     })
   }
-  // console.log(back)
   return back
 }
 export default Toast;
