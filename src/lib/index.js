@@ -4,7 +4,7 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-06-17 15:37:41
  * @LastEditors: PiPi
- * @LastEditTime: 2019-09-27 14:05:01
+ * @LastEditTime: 2019-10-09 13:58:36
  */
 function recursion(obj,Callback){
   var num = {}
@@ -35,7 +35,48 @@ function recursion(obj,Callback){
   x(obj,num)
   return num
 }
-
+function keyData(key){
+  var request = {}
+  try{
+    request[key] = JSON.parse(dataGet(key))
+  }catch (e){
+    request[key] = dataGet(key)
+  }
+  for(let o in request){
+    let value = request[o],voType
+    try{
+      voType = request[o].constructor.name
+    }catch (e){
+      voType = ''
+    }
+    if(voType == 'Object'){
+      value = recursion(request[o],function(){
+        if (localStorage.getItem(o)) {
+          localStorage.setItem(o, JSON.stringify(window.amx[o]))
+        }else if(sessionStorage.getItem(todo)){
+          sessionStorage.setItem(o, JSON.stringify(window.amx[o]))
+        }
+      })
+    }
+    
+    Object.defineProperty(window.amx, o, {
+      enumerable: true,
+      configurable: true,
+      get: function() {
+        return value
+      },
+      set: function(v) {
+        value = v
+        if (localStorage.getItem(o)) {
+          localStorage.setItem(o, JSON.stringify(v))
+        }else if(sessionStorage.getItem(todo)){
+          sessionStorage.setItem(o, JSON.stringify(v))
+        }
+      }
+    })
+  }
+  // return back
+}
 let orignalSetItem = localStorage.setItem;
 localStorage.setItem = function (key, newValue) {
   let setItemEvent = new Event("setItemEvent")
@@ -64,6 +105,7 @@ function dataGet(key) {
 }
 let Toast = {}
 Toast.install = function (Vue, todos) {
+  var timestamp=new Date().getTime()
   let result = {}
   if (todos.data) {
     for (let todo in todos.data) {
@@ -79,12 +121,18 @@ Toast.install = function (Vue, todos) {
       }
     }
   }
+  window.amx = {}
+  // console.log((new Date().getTime()-timestamp))
 }
 
 Toast.read = function (key) {
+  // var timestamp=new Date().getTime()
   const type1 = localStorage.getItem(key), type2 = sessionStorage.getItem(key)
   let data = {}
-  data[key] = JSON.parse(dataGet(key))
+  if(!window.amx[key]){
+    keyData(key)
+  }
+  data[key] = window.amx[key]
   let watch = {}
   watch[key] = {
     handler(val, oldVal) {
@@ -96,12 +144,13 @@ Toast.read = function (key) {
     },
     deep: true
   }
+  // console.log((new Date().getTime()-timestamp))
   return {
     data() {
       return data
     },
     created(){
-      this[key] = JSON.parse(dataGet(key))
+      this[key] = window.amx[key]
     },
     mounted() {
       window.addEventListener('storage', (e) => {
@@ -117,7 +166,7 @@ Toast.read = function (key) {
         }
       });
     },
-    watch: watch
+    // watch: watch
   }
 }
 

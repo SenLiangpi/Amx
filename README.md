@@ -4,7 +4,7 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-06-17 15:38:23
  * @LastEditors: PiPi
- * @LastEditTime: 2019-09-04 16:25:53
+ * @LastEditTime: 2019-10-09 14:00:32
  -->
 # 全局状态管理 Amx.js
 Amx.js是一个用纯JavaScript编写的全局状态管理，主要为解决页面或组件之间状态共享、管理等问题。
@@ -90,8 +90,8 @@ github : https://github.com/SenLiangpi/Amx
         mixins:[Amx.read('a'),Amx.read('b')],//调用变量 页面变量 不可以与调用变量的 name 一样
         methods: {
             button(){
-                this.video.a++//直接可以调用使用 当值发生改变时 会动态的进行数据绑定,永久存储的数据也会进行改变
-                this.home.a++
+                window.amx.a.a++//直接可以调用使用 当值发生改变时 会动态的进行数据绑定,永久存储的数据也会进行改变
+                window.amx.b.a++
             }
         },
         watch: {
