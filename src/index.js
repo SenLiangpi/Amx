@@ -4,37 +4,9 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-06-17 15:37:41
  * @LastEditors: PiPi
- * @LastEditTime: 2019-10-09 13:58:36
+ * @LastEditTime: 2019-10-22 17:13:41
  */
-function recursion(obj,Callback){
-  var num = {}
-  function x(o,z) {
-    for(let a in o){
-      let value = o[a],voType
-      Object.defineProperty( z, a, {
-        enumerable: true,
-        configurable: true,
-        get: function() {
-          return value
-        },
-        set: function(v) {
-          value = v
-          Callback()
-        }
-      })
-      try{
-        voType = request[o].constructor.name
-      }catch (e){
-        voType = ''
-      }
-      if(voType == 'Object'){
-        x(o[a],z[a])
-      }
-    }
-  }
-  x(obj,num)
-  return num
-}
+import recursion from './utils/model'
 function keyData(key){
   var request = {}
   try{
@@ -75,7 +47,6 @@ function keyData(key){
       }
     })
   }
-  // return back
 }
 let orignalSetItem = localStorage.setItem;
 localStorage.setItem = function (key, newValue) {
