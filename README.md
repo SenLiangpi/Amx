@@ -4,10 +4,21 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-06-17 15:38:23
  * @LastEditors: PiPi
- * @LastEditTime: 2019-10-09 14:00:32
+ * @LastEditTime: 2019-10-23 15:52:57
  -->
 # 全局状态管理 Amx.js
-Amx.js是一个用纯JavaScript编写的全局状态管理，主要为解决页面或组件之间状态共享、管理等问题。
+令人兴奋的消息，Amx将进行2.x版本的更新，为了增强本地存储和全局变量管理，将更新兼容localStorage，sessionStorage以及indexedDB。
+
+使用1.x版本的用户也不必担心，因为1.x版本还是会继续维护，但可能不会更新新的功能。
+github : https://github.com/SenLiangpi/amx-1.x
+
+支持Amx技术：
+<!-- * cookies 是服务器发送到用户浏览器并保存在本地的一小块数据，它会在浏览器下次向同一服务器再发起请求时被携带并发送到服务器上。通常，它用于告知服务端两个请求是否来自同一浏览器，如保持用户的登录状态。Cookie使基于无状态的HTTP协议记录稳定的状态信息成为了可能。 -->
+* Storage 提供了访问特定域名下的会话存储或本地存储的功能，例如，可以添加、修改或删除存储的数据项。只读的localStorage 属性允许你访问一个Document 源（origin）的对象 Storage；存储的数据将保存在浏览器会话中。localStorage 类似 sessionStorage，但其区别在于：存储在 localStorage 的数据可以长期保留；而当页面会话结束——也就是说，当页面被关闭时，存储在 sessionStorage 的数据会被清除 。
+* IndexedDB 是一个用于在浏览器中储存较大数据结构的 Web API, 并提供索引功能以实现高性能查找. 像其他基于 SQL 的 关系型数据库管理系统 (RDBMS) 一样, IndexedDB 是一个事务型的数据库系统. 然而, 它是使用 JavaScript 对象而非列数固定的表格来储存数据的.
+
+Amx 2.x 将会让你以更快的速度，占用更小的内存，更简单的操作使用它们。但它还在我开发计划中可能需要2个月左右的时间才能提供给大家使用，尽情期待。
+<!-- Amx.js是一个用纯JavaScript编写的全局状态管理，主要为解决页面或组件之间状态共享、管理等问题。
 Amx第一版组要支持vue，还在编写过程中。
 
 支持Amx技术：
@@ -151,4 +162,4 @@ Amx.allDelete(type) //删除全部数据
 type===true //删除所有 强制更新的内容
 type===false //删除所有 缓存内容
 //不传值删除所有
-```
+``` -->
