@@ -1,12 +1,12 @@
 <!--
  * @Author: PiPi
- * @Email: pisenliang@gmail.com
  * @Github: https://github.com/SenLiangpi
- * @Website: https://senliangpi.github.io/blog/#/
- * @Date: 2020-05-20 09:46:48
- * @LastEditors: Pi Patle
- * @LastEditTime: 2020-10-20 15:08:08
---> 
+ * @Email: pisenliang@gmail.com
+ * @Date: 2019-06-17 15:38:23
+ * @LastEditors: PiPi
+ * @LastEditTime: 2020-05-29 11:26:40
+ -->
+ <!-- Amx-1.x 这里是amx 1.x 版本，由于amx 2.x 版本将进行比较大的扩展在此设立amx 1.x 的版本控制，为使用1.x版本的用户服务。 -->
 # 全局状态管理 Amx.js
 Amx.js是一个用纯JavaScript编写的全局状态管理，主要为解决页面或组件之间的数据共享。
 <!-- Amx第一版组要支持vue，还在编写过程中。 -->
@@ -146,4 +146,3 @@ type===true //删除所有 强制更新的内容
 type===false //删除所有 缓存内容
 //不传值删除所有
 ```
-皮皮研究所製作
