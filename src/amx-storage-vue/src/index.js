@@ -5,16 +5,96 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-10-21 10:29:36
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-10-21 16:52:03
+ * @LastEditTime: 2020-10-27 15:04:22
  */
 const amx_storage_vue = {};
-//深度監聽 json
-const dataGet = (value)=>{
-  let data
+let storage = {
+  local: {},
+  session:{}
+}
+// 深度监听 json
+function recursion(obj, Callback) {
+  var num = {}
+  function x(o, z) {
+    for (let a in o) {
+      let value = o[a]
+      Object.defineProperty(z, a, {
+        enumerable: true,
+        configurable: true,
+        get: function () {
+          return value
+        },
+        set: function (v) {
+          value = v
+          Callback(v)
+        }
+      })
+      try {
+        if(o[a].constructor.name == 'Object'){
+          x(o[a],z[a])
+        }
+      } catch (e) {
+        // console.log(e)
+      }
+    }
+  }
+  try {
+    if(obj.constructor.name == 'Object'){
+      x(obj, num)
+    }
+  } catch (e) {
+    // console.log(e)
+  }
+  return num
+}
+//监听设置
+const dataGet = (value,key,type)=>{
+  let data,voType
   try {
     data = JSON.parse(value)
   } catch (e) {
     data = value
+  }
+  try {
+    voType = data.constructor.name
+  } catch (e) {
+    voType = ''
+  }
+  if (voType == 'Object') {
+    if(type==='local'){
+      data = recursion(data, (v)=> {
+        localStorage.setItem(key, JSON.stringify(v))
+      })
+    }else if(type==='session'){
+      data = recursion(data, (v)=> {
+        sessionStorage.setItem(key, JSON.stringify(v))
+      })
+    }
+  }
+  if(type==='local'){
+    Object.defineProperty(storage.local, key, {
+      enumerable: true,
+      configurable: true,
+      get: function () {
+        return data
+      },
+      set: function (v) {
+        data = v
+        localStorage.setItem(key, JSON.stringify(v))
+      }
+    })
+  }else if(type==='session'){
+    Object.defineProperty(storage.session, key, {
+      enumerable: true,
+      configurable: true,
+      get: function () {
+        return data
+      },
+      set: function (v) {
+        data = v
+        sessionStorage.setItem(key, JSON.stringify(v))
+      }
+    })
   }
   return data
 }
@@ -32,17 +112,12 @@ amx_storage_vue.install = (Vue, todos)=>{
       sessionStorage.setItem(todo, JSON.stringify(todos.session[todo]))
     }
   }
-  const storage = {
-    local: {},
-    session: {}
-  }
   for(let local in todos.local){
-    storage.local[local] = dataGet(localStorage.getItem(local))
+    dataGet(localStorage.getItem(local),local,'local')
   }
   for(let session in todos.session){
-    storage.session[session] = dataGet(sessionStorage.getItem(session))
+    dataGet(sessionStorage.getItem(session),session,'session')
   }
-  console.log(storage.local)
-  console.log(storage.session)
+  Vue.prototype.$storage = storage
 }
 export default amx_storage_vue
