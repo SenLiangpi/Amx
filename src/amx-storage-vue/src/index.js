@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-10-21 10:29:36
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-10-27 15:04:22
+ * @LastEditTime: 2020-10-28 14:45:03
  */
 const amx_storage_vue = {};
 let storage = {
@@ -99,9 +99,23 @@ const dataGet = (value,key,type)=>{
   return data
 }
 
+// window.addEventListener('storage', (e) => {
+//   console.log(e)
+//   if(storage)
+//   if(window.amx[e.key] != e.newValue)
+//   try {
+//     window.amx[e.key] = recursion(JSON.parse(e.newValue),function () {
+//       if (localStorage.getItem(e.key)) {
+//         localStorage.setItem(e.key, JSON.stringify(window.amx[e.key]))
+//       } else if (sessionStorage.getItem(e.key)) {
+//         sessionStorage.setItem(e.key, JSON.stringify(window.amx[e.key]))
+//       }
+//     })
+//   } catch (e) {
+//     window.amx[e.key] = e.newValue
+//   }
+// })
 amx_storage_vue.install = (Vue, todos)=>{
-  console.log(Vue)
-  console.log(todos)
   for(let todo in todos.local){
     if (!localStorage.getItem(todo)) {
       localStorage.setItem(todo, JSON.stringify(todos.local[todo]))
