@@ -3,8 +3,8 @@
  * @Github: https://github.com/SenLiangpi
  * @Email: pisenliang@gmail.com
  * @Date: 2019-06-17 15:37:41
- * @LastEditors: PiPi
- * @LastEditTime: 2020-03-19 12:43:02
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-10-28 11:48:04
  */
 // localStorage 写入操作 监听
 let orignalSetItem = localStorage.setItem;
@@ -15,7 +15,7 @@ localStorage.setItem = function (key, newValue) {
   window.dispatchEvent(setItemEvent)
   orignalSetItem.apply(this, arguments)
 }
-//监听 localStorage 改变
+//监听 Storage 改变
 window.addEventListener('storage', (e) => {
   if(window.amx[e.key] != e.newValue)
   try {
