@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-05-20 09:46:48
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-10-21 09:51:24
+ * @LastEditTime: 2021-04-15 10:39:10
 --> 
 <template>
   <div id="app">
@@ -19,7 +19,7 @@ export default {
   name: 'App',
   created(){
   }
-}
+} 
 </script>
 
 <style>
